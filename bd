@@ -1,0 +1,55 @@
+CREATE TABLE tb_cliente (
+id_cli integer primary key,
+nome_cli varchar (100),
+email_cli varchar (100),
+tel_cli integer,
+dtnasc_cli date)
+
+CREATE TABLE tb_compras (
+id_compra integer primary key,
+produto integer,
+data_compra date,
+valor decimal,
+id_cli integer)
+
+alter table tb_compras add constraint id_cli foreign key (id_cli) references tb_cliente (id_cli)
+
+
+INSERT INTO tb_cliente VALUES (
+1001, 'MARIA', 'MARIA@GMAIL.COM', 889990000, '1999-02-01')
+
+INSERT INTO tb_cliente VALUES (
+1103, 'JOÃO', 'JOÃO@HOTMAIL.COM', 879009998, '1998-03-07'),
+(1204, 'ANA', 'ANASILVA@GMAIL.COM', 118991189, '2000-01-07'),
+(1305, 'LUCAS', 'LUCASM@OUTLOOK.COM', 1209087666, '1997-03-03'),
+(1902, 'JULIA', 'JULIAS@HOTMAIL.COM', 1290998822, '1996-09-08');
+
+ALTER TABLE TB_COMPRAS alter column produto type varchar (50) 
+
+INSERT INTO tb_compras VALUES (
+003, 'BOLSAVERDE', '2022-09-06', 3199, 1204)
+
+INSERT INTO tb_compras values
+(005, 'CINTOCOURO', '2021-08-07', 229, 1305),
+(007, 'COLETE', '2022-05-01', 599, 1902),
+(008, 'CALÇAAZULM', '2022-05-19', 799, 1103),
+(012, 'CALÇACOURO', '2022-10-23', 289, 1902),
+(034, 'BOLSAPRETA', '2022-12-13', 899, 1204),
+(016, 'SHORTS', '2022-09-08', 178, 1204),
+(029, 'COMISAGP', '2022-09-08', 199, 1001),
+(043, 'REGATAPRETA', '2022-09-08', 319, 1001),
+(011, 'BOLSASTRASS', '2022-09-08', 245, 1001),
+(001, 'SAIA', '2022-09-08', 199, 1103),
+(055, 'CINTOM', '2022-09-08', 399, 1305),
+(023, 'BLUSAMC', '2022-09-08', 519, 1902),
+(022, 'TOP', '2022-09-08', 229, 1305),
+(013, 'CALÇAPL', '2022-09-08', 999, 1305);
+
+SELECT nome_cli, email_cli from tb_cliente
+
+SELECT tc.nome_cli, tc.email_cli,
+ARRAY_AGG(tcm.produto) as produtos_cliente,
+SUM (tcm.valor) as valortotal
+FROM tb_cliente tc
+LEFT JOIN tb_compras tcm on tc.id_cli = tcm.id_cli
+GROUP BY tc.nome_cli, tc.id_cli;
